@@ -15,7 +15,7 @@
 #define BUFFER_SIZE 1024
 
 // 시그널 핸들러 함수
-// SIGINT 신호(Ctrl+C)를 받으면 현재 수신한 시그널 번호를 출력합니다.
+// SIGINT 신호(Ctrl+C)를 받으면 현재 수신한 시그널 번호를 출력
 void signal_handler(int signum) {
     printf("수신한 시그널: %d\n", signum);
 }
@@ -37,7 +37,7 @@ int main() {
     // 익명 공유 메모리 생성 및 초기화
     // mmap 시스템 호출을 사용하여 공유 메모리를 할당하고 초기값 100을 설정합니다.
     shared_mem = mmap(NULL, SHARED_MEM_SIZE, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0);
-    *shared_mem = 100;
+    *shared_mem = 100; // 공유 메모리 초기값 설정
 
     // 파이프 생성
     // pipe 시스템 호출을 사용하여 파이프를 생성합니다.
@@ -84,7 +84,7 @@ int main() {
         }
 
         snprintf(buffer, sizeof(buffer), "안녕하세요 이건 시스템 프로그래밍 과제 파일입니다.\n");
-        write(file_fd, buffer, strlen(buffer));
+        write(file_fd, buffer, strlen(buffer)); // 파일에 데이터 쓰기
         close(file_fd);
 
         printf("'%s' 파일 입력이 정상적으로 완료되었습니다.\n", filename);
@@ -97,8 +97,8 @@ int main() {
         }
 
         printf("\n파일 정보:\n");
-        printf("  파일 크기: %ld bytes\n", file_stat.st_size);
-        printf("  최근 수정 시간: %s", ctime(&file_stat.st_mtime));
+        printf("  파일 크기: %ld bytes\n", file_stat.st_size); // 파일 크기 출력
+        printf("  최근 수정 시간: %s", ctime(&file_stat.st_mtime)); // 파일 수정 시간 출력
 
         // 파일 내용 읽기
         // open 시스템 호출을 사용하여 example.txt 파일을 읽기 모드로 엽니다.
@@ -120,6 +120,7 @@ int main() {
         // 파일 내용 출력
         printf("\n파일 내용:\n%s\n", buffer);
 
+        // 시스템 정보 출력
         printf("\n시스템 정보:\n");
         printf("프로세스 ID: %d\n", getpid());
         printf("부모 프로세스 ID: %d\n", getppid());
@@ -128,16 +129,16 @@ int main() {
 
         // ls 명령어 실행
         printf("\n파일에 대해 ls 명령어 실행 중:\n");
-        pid = fork();
+        pid = fork(); // 자식 프로세스 생성
         if (pid == 0) {
-            execl("/bin/ls", "ls", "-l", filename, NULL);
+            execl("/bin/ls", "ls", "-l", filename, NULL); // ls 명령어 실행
             perror("exec");
             exit(1);
         } else if (pid < 0) {
             perror("fork");
             return 1;
         } else {
-            wait(NULL);
+            wait(NULL); // 자식 프로세스 종료 대기
             printf("\nls 명령어 실행 완료.\n");
         }
     }
